@@ -20,9 +20,11 @@
 
 ## Установка
 
-### 1. Скопируй папку плагина
+### 1. Склонируй репозиторий
 
-Скопируй папку `larixon-analytics` в `C:\AI Container\` (или в любое удобное место).
+```bash
+git clone https://github.com/Spotpetrov/larixon-analytics.git
+```
 
 ### 2. Установи плагин
 
@@ -160,7 +162,11 @@ POSTHOG_BASE_URL=https://posthog.larixon.com npx wrangler dev
 
 ### Как обновить плагин
 
-Скопируй новую версию папки `larixon-analytics` поверх старой и перезапусти Claude Code.
+```bash
+cd путь/к/larixon-analytics
+git pull
+```
+Затем заново выполни команду установки из шага 2 и перезапусти Claude Code.
 
 ### Как обновить MCP серверы
 
