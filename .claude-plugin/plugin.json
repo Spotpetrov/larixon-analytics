@@ -1,0 +1,8 @@
+{
+  "name": "larixon-analytics",
+  "description": "Аналитика Larixon — GA4, PostHog, Superset, визуализация данных",
+  "author": {
+    "name": "Larixon"
+  },
+  "version": "1.0.0"
+}

@@ -1,0 +1,31 @@
+{
+  "mcpServers": {
+    "google-analytics": {
+      "command": "npx",
+      "args": ["-y", "mcp-server-google-analytics"],
+      "env": {
+        "GOOGLE_CLIENT_EMAIL": "analytics-mcp@larixon-analytics.iam.gserviceaccount.com",
+        "GOOGLE_PRIVATE_KEY": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDKkTGI8ZVoRCL7\n94kvO7hoIWekTuHclgJB0gPrND1cxlz5Jh0Klvd6z+WJ0j0bHrv6IxPFu8ZsXsXw\nrfeVQUyMLFzu7w0iZna0AufapxO8VJnudU46k7/KoRbqf/l6tajsFAVUJV+V53OS\nrL+KZjiOImDcTUGWWM6hmT70/NpKMz7fCR2HT+uIk91Q45oT1veFbfWtux+P7Pyw\nlP8vAW+B1n+4bvgJa6knCAJpXqnQFW8TV6SxaLNbblcAPz+h6CNm2kjDqe3BXS71\n68+MyEfaxVzuMHHEpnu/k1PgaCgLjok+JaU0gmfoJPHaByMINqscCW5DYBvI1+yo\nOcA5WswpAgMBAAECggEACVrEKVlSt4JyBSXMyYgd/30PbriP2KJ6zzRWJv3+GXM1\npvHaJHuNSTghlwhE9yQntSj6iEagJrAHvxIhnVxrHwwLbKNQfXay46RAtcnCcQ+N\nHkR/jNf24vImf0TSrhaGiwRvrI+fRupt3Wep3sfSs8mlpHbS4REP1cmgbSriH8wB\n9TpQirNBVQA+q9/XlMCK/lSbEavXWyG8JAQc8Sz3l+cHaiorzrl0VNnKvjml+/UM\nqCF5Zjy8347q2036aiHHyYB1Ay/4bOCMSyFed9TEfdAZhyRo2IpFNdsKWdpIrlEM\n/rwZZO7Fc6aHh0ekier5GAW6QYlWE0KOep01Blq4ywKBgQD0N3AEKzqG1tVY8dU+\ncijZCFkrisWwfpKN9B8hDk67y1o1UVouXmDtusd/nUcxG7TYe/GtPTG7VnkIwS70\njSOdhLyGuK/avO+YxMDPzQQA/Dx8LffZXKfzhnjs/mBhhZSgz4fn7CaQgiMaCHwz\ntB/CVLRFlFzXP9OS5CfdbiCj2wKBgQDUV01/n4QSU/lVCQfkD6G02ef3qat2AZH7\njQdGWxH3LmsXwu873kdq/3a5A/hTek5ZrJN4rwhlEXPPup2eQyWM1ncJly4K/pgI\n1WDUbI5pE9vJLFPVRS1fJVS/tRqM/wqsA3ACeK+MlrAo8+maJSSnTzFwpOWcXquk\nUGzDEZ/RSwKBgQDzbiccILLwIUj8peI3oreQzr+DpYo0yZXwJby5yHc2vhanOvY3\nbiAUF7AwRmfmTYXQnItkcbEW2bU/wsC5R86OfvclGwc/dEEn+EdxWxx4lvT7mx6I\n7dED77CuG0mbK/ng6bzAsyYluXKfyoFzUEKwBJrFGIQKkzakHwSVteaXLQKBgFMS\nIICIQFwHPCj3Un33W5TsFuL+HtUYwiq+PpVYtYuVPlJacctjJ1+Ft8Wj9vd5hsNw\nT3VMTKV1kXA4Gse6jystD/7RhTLJ7WKvT6VrHr+fBEIMtHNgD+MEMMabLFrywBMR\neTWOT2dZ4Gr1GXOzikZmJfpimG13YAD1ccdS0spHAoGBAKNUWTXIw0m3pLSkVHWP\nThznFNJz6udX95lIRVO5px2XYKgkPnDQL3o6J7vgcZa2zVC28I28S8+rIF+4YM7+\n/ENoaZHtTgUeamu2rG5Iczd0Uwio0ONJbFMS2N7I52jywlrnFpTQcSIYohYT++hK\ncrVNmVPGdr7B5LF0bjHGjUE6\n-----END PRIVATE KEY-----\n",
+        "GA_PROPERTY_ID": "150790824"
+      }
+    },
+    "superset": {
+      "command": "uvx",
+      "args": ["--from", "superset-mcp", "superset-mcp"],
+      "env": {
+        "SUPERSET_BASE_URL": "https://superset.dev.larixon.com",
+        "SUPERSET_USERNAME": "petrovche@gmail.com",
+        "SUPERSET_PASSWORD": "Aeri9lo3"
+      }
+    },
+    "posthog": {
+      "command": "bash",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/scripts/start-posthog.sh"],
+      "env": {
+        "POSTHOG_API_KEY": "phx_qCTGewS4Y599bhqs46IEOBBjhORwKVikshNFsmfNsYab2H6",
+        "POSTHOG_BASE_URL": "https://posthog.larixon.com",
+        "POSTHOG_MCP_DIR": ""
+      }
+    }
+  }
+}
