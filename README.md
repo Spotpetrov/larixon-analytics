@@ -52,7 +52,7 @@ Copy-Item -Path "C:\путь\к\larixon-analytics" -Destination "$env:USERPROFIL
 Выполни `/mcp` — должны быть видны серверы:
 - `google-analytics` — **running**
 - `superset` — **running**
-- `posthog` — **running** (при первом запуске может занять 1-2 мин)
+- `posthog` — **running**
 
 ### 5. Попробуй
 
@@ -88,19 +88,6 @@ Copy-Item -Path "C:\путь\к\larixon-analytics" -Destination "$env:USERPROFIL
 - «Круговая диаграмма источников трафика»
 
 Claude сам определяет какую систему использовать и предлагает построить график когда это уместно.
-
----
-
-## PostHog — как работает прокси
-
-PostHog на `posthog.larixon.com` подключается через локальный прокси (Cloudflare Worker на `localhost:8787`). **Прокси запускается автоматически** — ничего делать не нужно.
-
-При **первом запуске** скрипт сам:
-1. Клонирует `posthog-mcp` в `~/posthog-mcp`
-2. Устанавливает зависимости (pnpm)
-3. Запускает прокси на `localhost:8787`
-
-Первый раз это занимает 1-2 минуты. Последующие запуски — быстрые.
 
 ---
 
@@ -144,7 +131,7 @@ GA4 использует **общий сервисный аккаунт** — д
    - Имя: `claude-code`
    - Скоупы: выбери все доступные
 4. Скопируй ключ (начинается с `phx_`, показывается только один раз!)
-5. В `.mcp.json` замени значение `POSTHOG_API_KEY` на свой ключ
+5. В `.mcp.json` найди строку с `Authorization:Bearer phx_...` и замени ключ на свой
 
 ---
 
@@ -163,18 +150,10 @@ git --version    # должен быть установлен
 
 ### PostHog не работает
 
-Прокси запускается автоматически через Node.js скрипт. Если при первом запуске ошибка — подожди 1-2 минуты (идёт клонирование posthog-mcp и установка зависимостей).
-
-Для ручной диагностики:
-```bash
-cd ~/posthog-mcp/typescript
-POSTHOG_BASE_URL=https://posthog.larixon.com npx wrangler dev
-```
-Если прокси стартовал на `localhost:8787` — перезапусти Claude Code.
-
-### PostHog: ошибка «pnpm not found» или «wrangler not found»
-
-Эти зависимости устанавливаются автоматически через `npx`. Убедись что Node.js 18+ установлен и `npx` работает.
+PostHog подключается напрямую к `posthog.larixon.com/mcp` через `mcp-remote`. Проверь:
+1. Доступен ли `posthog.larixon.com` в браузере
+2. Верный ли API-ключ в `.mcp.json` (начинается с `phx_`)
+3. Установлен ли Node.js 18+ (`node -v`)
 
 ### Ошибка «uvx not found»
 
