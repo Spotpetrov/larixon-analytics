@@ -34,7 +34,7 @@ description: "Скил для работы с аналитикой Larixon. Ак
 
 ### PostHog
 - **URL**: `posthog.larixon.com` (self-hosted)
-- **Подключение**: напрямую к `posthog.larixon.com/mcp` через mcp-remote
+- **Подключение**: через локальный прокси на `localhost:8787` (wrangler dev, запускается автоматически)
 - **Для чего**: продуктовая аналитика, пользовательские события, фичфлаги, A/B эксперименты, когорты, воронки, ошибки
 - Подробности: загрузи `references/posthog-tools.md`
 
@@ -65,7 +65,7 @@ description: "Скил для работы с аналитикой Larixon. Ак
 ### Ошибки
 Если MCP сервер недоступен — сообщи какой именно и предложи:
 - GA4: проверить `/mcp`, перезапустить Claude Code
-- PostHog: проверить доступность `posthog.larixon.com`, проверить API-ключ в `.mcp.json`
+- PostHog: проверить что `posthog-mcp` установлен (`~/posthog-mcp`), проверить доступность `posthog.larixon.com`, проверить API-ключ в `.mcp.json`
 - Superset: проверить доступность `superset.dev.larixon.com`
 
 ## Визуализация (Chart.js)
@@ -132,7 +132,7 @@ description: "Скил для работы с аналитикой Larixon. Ак
 1. Открой [posthog.larixon.com/settings/user-api-keys](https://posthog.larixon.com/settings/user-api-keys)
 2. Создай Personal API Key (имя: `claude-code`, скоупы: все)
 3. Скопируй ключ (начинается с `phx_`)
-4. В `.mcp.json` найди строку `Authorization:Bearer phx_...` и замени ключ на свой
+4. В `.mcp.json` замени значение `POSTHOG_API_KEY` на свой ключ
 
 ### Google Analytics
 Используется общий сервисный аккаунт. Менять не нужно.
@@ -140,7 +140,7 @@ description: "Скил для работы с аналитикой Larixon. Ак
 ## FAQ
 
 **PostHog не работает / ошибка подключения**
-→ Проверь доступность `posthog.larixon.com` в браузере. Проверь что API-ключ в `.mcp.json` верный (начинается с `phx_`). Перезапусти Claude Code.
+→ Прокси запускается автоматически. Проверь что `posthog-mcp` установлен (`~/posthog-mcp`). Если нет — запусти `scripts/setup-posthog.ps1`. Проверь доступность `posthog.larixon.com` и API-ключ в `.mcp.json`.
 
 **GA4 / Superset не работает**
 → Выполни `/mcp` и проверь статус серверов. Перезапусти Claude Code.

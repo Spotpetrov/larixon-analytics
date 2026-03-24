@@ -43,18 +43,28 @@ git clone https://github.com/Spotpetrov/larixon-analytics.git
 Copy-Item -Path "C:\путь\к\larixon-analytics" -Destination "$env:USERPROFILE\.claude\plugins\marketplaces\larixon-analytics" -Recurse -Force
 ```
 
-### 3. Перезапусти Claude Code
+### 3. Установи PostHog прокси (один раз)
+
+PostHog self-hosted требует локальный прокси. Запусти **один раз**:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File "$env:USERPROFILE\.claude\plugins\marketplaces\larixon-analytics\scripts\setup-posthog.ps1"
+```
+
+Это клонирует `posthog-mcp` и установит зависимости (1-2 минуты). После этого прокси будет **запускаться автоматически** при старте Claude Code.
+
+### 4. Перезапусти Claude Code
 
 Закрой и открой заново.
 
-### 4. Проверь подключение
+### 5. Проверь подключение
 
 Выполни `/mcp` — должны быть видны серверы:
 - `google-analytics` — **running**
 - `superset` — **running**
 - `posthog` — **running**
 
-### 5. Попробуй
+### 6. Попробуй
 
 Напиши в чат:
 
@@ -131,7 +141,7 @@ GA4 использует **общий сервисный аккаунт** — д
    - Имя: `claude-code`
    - Скоупы: выбери все доступные
 4. Скопируй ключ (начинается с `phx_`, показывается только один раз!)
-5. В `.mcp.json` найди строку с `Authorization:Bearer phx_...` и замени ключ на свой
+5. В `.mcp.json` замени значение `POSTHOG_API_KEY` на свой ключ
 
 ---
 
@@ -150,10 +160,11 @@ git --version    # должен быть установлен
 
 ### PostHog не работает
 
-PostHog подключается напрямую к `posthog.larixon.com/mcp` через `mcp-remote`. Проверь:
-1. Доступен ли `posthog.larixon.com` в браузере
-2. Верный ли API-ключ в `.mcp.json` (начинается с `phx_`)
-3. Установлен ли Node.js 18+ (`node -v`)
+PostHog работает через локальный прокси (wrangler dev на `localhost:8787`). Прокси запускается автоматически. Проверь:
+1. Установлен ли posthog-mcp? (`ls ~/posthog-mcp/typescript/package.json`). Если нет — запусти `scripts/setup-posthog.ps1`
+2. Доступен ли `posthog.larixon.com` в браузере
+3. Верный ли API-ключ в `.mcp.json` (`POSTHOG_API_KEY`, начинается с `phx_`)
+4. Установлен ли Node.js 18+ (`node -v`)
 
 ### Ошибка «uvx not found»
 
