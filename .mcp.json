@@ -19,12 +19,11 @@
       }
     },
     "posthog": {
-      "command": "bash",
-      "args": ["${CLAUDE_PLUGIN_ROOT}/scripts/start-posthog.sh"],
+      "command": "node",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/scripts/start-posthog.js"],
       "env": {
         "POSTHOG_API_KEY": "phx_qCTGewS4Y599bhqs46IEOBBjhORwKVikshNFsmfNsYab2H6",
-        "POSTHOG_BASE_URL": "https://posthog.larixon.com",
-        "POSTHOG_MCP_DIR": ""
+        "POSTHOG_BASE_URL": "https://posthog.larixon.com"
       }
     }
   }

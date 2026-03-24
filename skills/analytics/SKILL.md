@@ -33,9 +33,9 @@ description: "Скил для работы с аналитикой Larixon. Ак
 - Подробности: загрузи `references/ga4-tools.md`
 
 ### PostHog
-- **URL**: `posthog.larixon.com` (self-hosted, прокси на `localhost:8787` запускается автоматически)
+- **URL**: `posthog.larixon.com` (self-hosted)
+- **Прокси**: Node.js скрипт автоматически запускает локальный прокси на `localhost:8787` при старте Claude Code. Первый запуск может занять 1-2 минуты (клонирование posthog-mcp + установка зависимостей). Последующие — быстрые.
 - **Для чего**: продуктовая аналитика, пользовательские события, фичфлаги, A/B эксперименты, когорты, воронки, ошибки
-- **Первый запуск**: может занять 1-2 минуты (клонирование posthog-mcp + установка зависимостей)
 - Подробности: загрузи `references/posthog-tools.md`
 
 ### Apache Superset
@@ -65,7 +65,7 @@ description: "Скил для работы с аналитикой Larixon. Ак
 ### Ошибки
 Если MCP сервер недоступен — сообщи какой именно и предложи:
 - GA4: проверить `/mcp`, перезапустить Claude Code
-- PostHog: прокси запускается автоматически; при первом запуске подождать 1-2 мин; для диагностики проверить `localhost:8787`
+- PostHog: прокси запускается автоматически через Node.js скрипт; при первом запуске подождать 1-2 мин (клонирование + установка); для диагностики: `cd ~/posthog-mcp/typescript && POSTHOG_BASE_URL=https://posthog.larixon.com npx wrangler dev`
 - Superset: проверить доступность `superset.dev.larixon.com`
 
 ## Визуализация (Chart.js)
@@ -132,7 +132,7 @@ description: "Скил для работы с аналитикой Larixon. Ак
 1. Открой [posthog.larixon.com/settings/user-api-keys](https://posthog.larixon.com/settings/user-api-keys)
 2. Создай Personal API Key (имя: `claude-code`, скоупы: все)
 3. Скопируй ключ (начинается с `phx_`)
-4. В `.mcp.json` замени ключ в строке `Authorization:Bearer phx_...`
+4. В `.mcp.json` замени значение `POSTHOG_API_KEY` на свой ключ
 
 ### Google Analytics
 Используется общий сервисный аккаунт. Менять не нужно.
