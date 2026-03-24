@@ -6,7 +6,7 @@ const { spawn } = require("child_process");
 const http = require("http");
 const path = require("path");
 const os = require("os");
-const { existsSync } = require("fs");
+const fs = require("fs");
 
 const API_KEY = process.env.POSTHOG_API_KEY;
 const BASE_URL = process.env.POSTHOG_BASE_URL || "https://posthog.larixon.com";
@@ -46,31 +46,43 @@ function waitForPort(port, timeoutSec) {
   });
 }
 
+function ensureDevVars(tsDir) {
+  const devVarsPath = path.join(tsDir, ".dev.vars");
+  const expected = `POSTHOG_BASE_URL=${BASE_URL}\n`;
+  if (!fs.existsSync(devVarsPath) || !fs.readFileSync(devVarsPath, "utf-8").includes("POSTHOG_BASE_URL")) {
+    fs.writeFileSync(devVarsPath, expected);
+    log(`Created .dev.vars with POSTHOG_BASE_URL=${BASE_URL}`);
+  }
+}
+
 async function main() {
+  const tsDir = path.join(MCP_DIR, "typescript");
+
   // 1. Check if proxy already running
   if (await isPortOpen(PORT)) {
     log("Proxy already running.");
   } else {
     // 2. Verify posthog-mcp is installed
-    const tsDir = path.join(MCP_DIR, "typescript");
-    if (!existsSync(tsDir)) {
+    if (!fs.existsSync(tsDir)) {
       log(`ERROR: posthog-mcp not found at ${MCP_DIR}`);
       log("Run the setup script first: scripts/setup-posthog.ps1");
       process.exit(1);
     }
 
-    // 3. Start wrangler dev in background
+    // 3. Ensure .dev.vars has POSTHOG_BASE_URL (required by Cloudflare Workers env)
+    ensureDevVars(tsDir);
+
+    // 4. Start wrangler dev in background
     log("Starting wrangler proxy...");
     const wrangler = spawn("npx", ["wrangler", "dev", "--port", String(PORT)], {
       cwd: tsDir,
-      env: { ...process.env, POSTHOG_BASE_URL: BASE_URL },
       stdio: "ignore",
       detached: true,
       shell: true,
     });
     wrangler.unref();
 
-    // 4. Wait for proxy
+    // 5. Wait for proxy
     try {
       await waitForPort(PORT, 30);
       log("Proxy ready.");
@@ -80,11 +92,16 @@ async function main() {
     }
   }
 
-  // 5. Run mcp-remote (bridges SSE to stdio for Claude Code)
+  // 6. Run mcp-remote (bridges HTTP to stdio for Claude Code)
+  //    IMPORTANT: shell must be false so the Authorization header stays as one argument
+  const isWin = process.platform === "win32";
+  const npxCmd = isWin ? "npx.cmd" : "npx";
+  const headerValue = `Authorization:Bearer ${API_KEY}`;
+
   const remote = spawn(
-    "npx",
-    ["-y", "mcp-remote@latest", `http://localhost:${PORT}/mcp`, "--header", `Authorization:Bearer ${API_KEY}`],
-    { stdio: ["pipe", "pipe", "inherit"], shell: true }
+    npxCmd,
+    ["-y", "mcp-remote@latest", `http://localhost:${PORT}/mcp`, "--header", headerValue],
+    { stdio: ["pipe", "pipe", "inherit"] }
   );
 
   process.stdin.pipe(remote.stdin);

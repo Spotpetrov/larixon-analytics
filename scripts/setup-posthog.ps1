@@ -23,6 +23,10 @@ if ($LASTEXITCODE -ne 0) {
     exit 1
 }
 
+# Создаём .dev.vars для Cloudflare Workers env (self-hosted PostHog URL)
+$devVarsPath = Join-Path $mcpDir "typescript\.dev.vars"
+Set-Content -Path $devVarsPath -Value "POSTHOG_BASE_URL=https://posthog.larixon.com" -Encoding UTF8
+
 Write-Host ""
 Write-Host "Готово! PostHog MCP прокси установлен." -ForegroundColor Green
 Write-Host "Перезапусти Claude Code — прокси запустится автоматически." -ForegroundColor Green
