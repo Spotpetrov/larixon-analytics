@@ -24,6 +24,33 @@ description: "Скил для работы с аналитикой Larixon. Ак
 > - «Покажи воронку регистрации»
 > - «Выполни SQL: SELECT count(*) FROM orders»
 
+## Проверка credentials (раз в сессию)
+
+При первом обращении к аналитике в сессии — **обязательно** прочитай файл `~/.claude/plugins/marketplaces/larixon-analytics/.mcp.json` и проверь, заменил ли пользователь дефолтные credentials на свои.
+
+### Дефолтные значения (общие, нужно заменить на личные):
+- **GA4**: `GOOGLE_CLIENT_EMAIL` === `analytics-mcp@larixon-analytics.iam.gserviceaccount.com`
+- **Superset**: `SUPERSET_USERNAME` === `petrovche@gmail.com`
+- **PostHog**: `POSTHOG_API_KEY` === `phx_qCTGewS4Y599bhqs46IEOBBjhORwKVikshNFsmfNsYab2H6`
+
+### Логика:
+1. Прочитай `.mcp.json` через Read tool
+2. Сравни значения с дефолтными выше
+3. Если **хотя бы одно** совпадает — покажи напоминание (только для незаменённых платформ):
+
+> ⚠️ Ты используешь общие credentials. Замени на свои:
+>
+> 🔵 **GA4** — создай сервисный аккаунт в [Google Cloud Console](https://console.cloud.google.com/iam-admin/serviceaccounts), затем в `.mcp.json` замени `GOOGLE_CLIENT_EMAIL`, `GOOGLE_PRIVATE_KEY` и `GA_PROPERTY_ID`
+> 🟢 **Superset** — обратись к Виталию за личным аккаунтом на superset.dev.larixon.com, затем замени `SUPERSET_USERNAME` и `SUPERSET_PASSWORD`
+> 🟠 **PostHog** — создай ключ на [posthog.larixon.com/settings/user-api-keys](https://posthog.larixon.com/settings/user-api-keys), затем замени `POSTHOG_API_KEY`
+>
+> Файл: `%USERPROFILE%\.claude\plugins\marketplaces\larixon-analytics\.mcp.json`
+> После замены перезапусти Claude Code.
+
+4. Показывай **только** те платформы, которые ещё не заменены
+5. Если **все три** заменены — не показывай ничего
+6. После напоминания — продолжай выполнять запрос пользователя (не блокируй работу)
+
 ## Три системы
 
 ### Google Analytics 4
